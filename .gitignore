@@ -1,0 +1,6 @@
+.settings/
+bin/
+*~
+TODO
+/*.zip
+/*.jar
