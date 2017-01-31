@@ -682,11 +682,8 @@ public class ImladrisCalendar {
 	private int[] calculateWeekAndDayOfWeek(int yen, int loa, int dayOfLoa) {
 		// This Loa's Yestare Day Of Week
 		int weekDayOfYestare = this.calculateDayOfWeekOfYestare(yen, loa);
-		System.out.println(weekDayOfYestare);
 		// Current day's day of week
 		int dayOfWeek = ((weekDayOfYestare + (dayOfLoa - 1) - 1) % 6) + 1;
-		System.out.println(dayOfLoa);
-		System.out.println(dayOfWeek);
 		// Week number
 		int week = (int)Math.floor((dayOfLoa + (6 - dayOfWeek) + (weekDayOfYestare - 1))/6);
 		// Group results
