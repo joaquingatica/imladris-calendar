@@ -1,5 +1,4 @@
-package erutulco.utils;
-
+package com.erutulco;
 
 import java.sql.Time;
 import java.util.GregorianCalendar;
