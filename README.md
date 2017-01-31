@@ -1,5 +1,4 @@
 # ImladrisCalendar.java</h1>
-**Version 1.1 beta**
 
 ## Files
 `src/ImladrisCalendar.java` The class that manages de Calendar itself
