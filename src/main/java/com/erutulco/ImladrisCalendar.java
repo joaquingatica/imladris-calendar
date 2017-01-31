@@ -411,7 +411,7 @@ public class ImladrisCalendar {
 		
 		int y = (yen-1)*144 + loa;
 		// calculate day of march of year 'y' in which loa begins
-		loaBeg = this.loaBeginingDay(y);
+		loaBeg = this.loaBeginningDay(y);
 		// calculate if is leap loa
 		isLeapLoa = this.checkIfLeapLoa(loa);
 		// calculate day of Loa
@@ -436,7 +436,7 @@ public class ImladrisCalendar {
 			isMonth = true;
 			month = this.calculateMonthFromPeriod(period);
 		}
-		int[] weekInfo = this.calculateWeekAndDayOfWeek(loa, daysOfLoa);
+		int[] weekInfo = this.calculateWeekAndDayOfWeek(yen, loa, daysOfLoa);
 		weekOfPeriod = weekInfo[0];
 		dayOfWeek = weekInfo[1];
 		yestareWeekDay = weekInfo[2];
@@ -472,7 +472,7 @@ public class ImladrisCalendar {
 		
 		int y = (yen-1)*144 + loa;
 		// calculate day of march of year 'y' in which loa begins
-		loaBeg = this.loaBeginingDay(y);
+		loaBeg = this.loaBeginningDay(y);
 		// calculate if is leap loa
 		isLeapLoa = this.checkIfLeapLoa(loa);
 		// calculate current month and day of month
@@ -484,7 +484,7 @@ public class ImladrisCalendar {
 			isMonth = true;
 			month = this.calculateMonthFromPeriod(period);
 		}
-		int[] weekInfo = this.calculateWeekAndDayOfWeek(loa, dayOfLoa);
+		int[] weekInfo = this.calculateWeekAndDayOfWeek(yen, loa, dayOfLoa);
 		weekOfPeriod = weekInfo[0];
 		dayOfWeek = weekInfo[1];
 		yestareWeekDay = weekInfo[2];
@@ -525,15 +525,24 @@ public class ImladrisCalendar {
 		int weekOfPeriod = 0;
 		int dayOfWeek = 0;
 		int yestareWeekDay = 0;
-		
+
+		// if sunset defined, check if has passed
+		if(this.isSunsetDefined()) {
+			String str = cal.get(GregorianCalendar.HOUR_OF_DAY)+":"+cal.get(GregorianCalendar.MINUTE)+":"+cal.get(GregorianCalendar.SECOND);
+			Time time = Time.valueOf(str);
+			if(!time.before(this.getSunset())) {
+				cal.add(GregorianCalendar.DAY_OF_MONTH, 1);
+				cal.set(GregorianCalendar.HOUR_OF_DAY, 0);
+			}
+		}
 		int y = cal.get(GregorianCalendar.YEAR);
 		// calculate day of march of year 'y' in which loa begins
-		loaBeg = this.loaBeginingDay(y);
+		loaBeg = this.loaBeginningDay(y);
 		GregorianCalendar loaCal = new GregorianCalendar(y, GregorianCalendar.MARCH, loaBeg);
 		// if that day hasn't come yet, use previous year's loa
 		if(cal.before(loaCal)) {
 			y = y-1;
-			loaBeg = this.loaBeginingDay(y);
+			loaBeg = this.loaBeginningDay(y);
 		}
 		// calculate yen
 		yen = this.calculateYen(y);
@@ -545,14 +554,6 @@ public class ImladrisCalendar {
 		loaCal.set(GregorianCalendar.YEAR, y);
 		loaCal.set(GregorianCalendar.DAY_OF_MONTH, loaBeg);
 		daysOfLoa = this.daysBetweenGregorian(loaCal, cal);
-		// if sunset defined, check if has passed
-		if(this.isSunsetDefined()) {
-			String str = cal.get(GregorianCalendar.HOUR_OF_DAY)+":"+cal.get(GregorianCalendar.MINUTE)+":"+cal.get(GregorianCalendar.SECOND);
-			Time time = Time.valueOf(str);
-			if(!time.before(this.getSunset())) {
-				daysOfLoa++;
-			}
-		}
 		// calculate current month and day of month
 		int[] periodInfo = this.calculatePeriodAndDayInPeriod(daysOfLoa, isLeapLoa);
 		period = periodInfo[0];
@@ -562,7 +563,7 @@ public class ImladrisCalendar {
 			isMonth = true;
 			month = this.calculateMonthFromPeriod(period);
 		}
-		int[] weekInfo = this.calculateWeekAndDayOfWeek(loa, daysOfLoa);
+		int[] weekInfo = this.calculateWeekAndDayOfWeek(yen, loa, daysOfLoa);
 		weekOfPeriod = weekInfo[0];
 		dayOfWeek = weekInfo[1];
 		yestareWeekDay = weekInfo[2];
@@ -581,20 +582,18 @@ public class ImladrisCalendar {
 		this.setYestareWeekDayInt(yestareWeekDay);
 	}
 	private int calculateYen(int y) {
-		int yen = (int)Math.floor(y/144);
-		if(this.calculateLoa(y) != 144)
-			yen = 1+yen;
-		return yen;
+		int sign = y >= 0 ? 1 : -1;
+		return (int)Math.floor((y - 1)/144) + sign;
 	}
 	private int calculateLoa(int y) {
-		int loa;
-		if((y != 0) && (y % 144 == 0))
-			loa = 144;
-		else
-			loa = (y % 144);
+		int loa = 0;
+		int sign = y >= 0 ? 1 : -1;
+		if(y != 0) {
+			loa = ((y - 1) % 144) + sign;
+		}
 		return loa;
 	}
-	private int loaBeginingDay(int y) {
+	private int loaBeginningDay(int y) {
 		int loa = this.calculateLoa(y);
 		int yen = this.calculateYen(y);
 		int yestare = this.calculateYestare(yen, loa);
@@ -656,27 +655,38 @@ public class ImladrisCalendar {
 	private int calculateMonthFromPeriod(int period) {
 		return (period < 4)? period - 1 : period - 2; 
 	}
-	private int[] calculateWeekAndDayOfWeek(int loa, int dayOfLoa) {
+	private int calculateDayOfWeekOfYestare(int yen, int loa) {
+		int offsetRegular = -1;
+		int offsetLeap = 2;
+		int firstYestareDayOfWeek = ImladrisCalendar.loa0yenIdayOfWeek;
+
+		int totalLoas = (yen) * 144 + loa - 1;
+		int totalLeapLoas = (int)Math.floor(totalLoas / 12);
+		int totalRegularLoas = totalLoas - totalLeapLoas;
+
+		int offsetFromLeap = offsetLeap * totalLeapLoas;
+		int offsetFromRegular = offsetRegular * totalRegularLoas;
+		int totalOffsetDays = offsetFromLeap + offsetFromRegular;
+		int totalOffsetWeekDays = totalOffsetDays % 6;
+
+		int yestareDayOfWeek = (firstYestareDayOfWeek - 1) + totalOffsetWeekDays;
+		if(yestareDayOfWeek >= 0) {
+			yestareDayOfWeek = yestareDayOfWeek  % 6;
+		} else {
+			yestareDayOfWeek = (6 - ((-yestareDayOfWeek) % 6));
+		}
+		yestareDayOfWeek += 1;
+
+		return yestareDayOfWeek;
+	}
+	private int[] calculateWeekAndDayOfWeek(int yen, int loa, int dayOfLoa) {
 		// This Loa's Yestare Day Of Week
-		int weekDayOfYestare = ImladrisCalendar.loa0yenIdayOfWeek;
-		// Offset from 24-loa block
-		int aux = loa % 24;
-		// Offset from 12-loa block (in any)
-		if(aux > 11) {
-			weekDayOfYestare = ((weekDayOfYestare -1 + 3) % 6) + 1;
-			aux -= 11;
-		}
-		// Remaining offset
-		for(int i = 0; i <= aux; i++) { // pairOfBlocks is between 0 and 11
-			weekDayOfYestare = (weekDayOfYestare - 1) - 1;
-			if(weekDayOfYestare < 0) {
-				weekDayOfYestare = 6 + weekDayOfYestare;
-			}
-			weekDayOfYestare += 1;
-		}
+		int weekDayOfYestare = this.calculateDayOfWeekOfYestare(yen, loa);
+		System.out.println(weekDayOfYestare);
 		// Current day's day of week
-		int dayOfWeekIfWasRegular = ((dayOfLoa-1) % 6) + 1;
-		int dayOfWeek = (((dayOfWeekIfWasRegular - 1) + (weekDayOfYestare - 1)) % 6) + 1;
+		int dayOfWeek = ((weekDayOfYestare + (dayOfLoa - 1) - 1) % 6) + 1;
+		System.out.println(dayOfLoa);
+		System.out.println(dayOfWeek);
 		// Week number
 		int week = (int)Math.floor((dayOfLoa + (6 - dayOfWeek) + (weekDayOfYestare - 1))/6);
 		// Group results
