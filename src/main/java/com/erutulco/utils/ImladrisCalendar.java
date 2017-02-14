@@ -109,20 +109,38 @@ public class ImladrisCalendar {
 
   /* ************** OTHER ************** */
 
+  /**
+   * Names for each Loa Period.
+   */
   private static final String[] PERIODS_OF_LOA = {
       "Yestarë", "Tuilë", "Lairë", "Yávië", "Ender",
       "Quellë", "Hrívë", "Coirë", "Mettarë"
   };
+  /**
+   * Length of each Loa Period.
+   */
   private static final int[] LENGTH_OF_PERIODS = {
       1, 54, 72, 54, 3, 54, 72, 54, 1
   };
+  /**
+   * Length of each Loa Period in Leap Loas.
+   */
   private static final int[] LENGTH_OF_PERIODS_LEAP = {
       1, 54, 72, 54, 6, 54, 72, 54, 1
   };
+  /**
+   * Name of each Week Day.
+   */
   private static final String[] DAYS_OF_WEEK = {
       "Elenya", "Anarya", "Isilya", "Aldúya", "Menelya", "Valanya"
   };
-  private static final int LOA_0_YEN_I_DAY_OF_WEEK = ELENYA;
+  /**
+   * First Day of the Week of the first Loa in Yen I.
+   */
+  private static final int LOA_1_YEN_I_DAY_OF_WEEK = ELENYA;
+  /**
+   * Ranges of Loas for each Yen with the day of march in which Yestarë falls.
+   */
   private static final int[][][] YESTARE_MAP = {
       {{1, 144, 26}}, // YEN I
       {{1, 144, 26}}, // YEN II
@@ -145,216 +163,290 @@ public class ImladrisCalendar {
 
   /* ************** ATTRIBUTES ************** */
 
+  /**
+   * GregorianCalendar instance to convert to or from Imladris.
+   */
   private GregorianCalendar gregorian;
+  /**
+   * Flag to check if sunset is set.
+   */
   private boolean sunsetDefined = false;
+  /**
+   * Time instance with the sunset information.
+   */
   private Time sunset;
+  /**
+   * Integer number for Yen.
+   */
   private int yenInt;
+  /**
+   * String for current Yen.
+   */
   private String yen;
+  /**
+   * Integer number for Loa.
+   */
   private int loa;
-  private int[][][] yestareMap;
+  /**
+   * Integer number for the beginning day of the Loa.
+   */
   private int loaBeginingDay;
+  /**
+   * Integer number for the day of the Loa.
+   */
   private int dayOfLoa;
+  /**
+   * Flag for leap Loa.
+   */
   private boolean leapLoa;
+  /**
+   * Integer number for the Period of the Loa.
+   */
   private int periodOfLoaInt;
+  /**
+   * String for the Period of the Loa.
+   */
   private String periodOfLoa;
+  /**
+   * Flag indicating if Period id month or special days.
+   */
   private boolean inMonth;
+  /**
+   * Integer number for the month in the Loa.
+   */
   private int monthOfLoa;
+  /**
+   * Integer number for the day in the Period.
+   */
   private int dayOfPeriod;
+  /**
+   * Integer number for the week in the Period.
+   */
   private int weekOfPeriod;
+  /**
+   * Integer number for the day of the week.
+   */
   private int dayOfWeekInt;
+  /**
+   * String for the day of the week.
+   */
   private String dayOfWeek;
+  /**
+   * Integer number for the week day of Yestarë.
+   */
   private int yestareWeekDayInt;
+  /**
+   * String for the week day of Yestarë.
+   */
   private String yestareWeekDay;
 
   /* ************** GETTERS & SETTERS ************** */
 
-  public GregorianCalendar getGregorian() {
+  public final GregorianCalendar getGregorian() {
     return gregorian;
   }
 
-  public void setGregorian(GregorianCalendar gregorian) {
+  public final void setGregorian(final GregorianCalendar gregorian) {
     this.gregorian = gregorian;
   }
 
-  public boolean isSunsetDefined() {
+  public final boolean isSunsetDefined() {
     return sunsetDefined;
   }
 
-  public void setSunsetDefined(boolean sunsetDefined) {
+  public final void setSunsetDefined(final boolean sunsetDefined) {
     this.sunsetDefined = sunsetDefined;
   }
 
-  public Time getSunset() {
+  public final Time getSunset() {
     return sunset;
   }
 
-  public void setSunset(Time sunset) {
+  public final void setSunset(final Time sunset) {
     this.setSunsetDefined(true);
     this.sunset = sunset;
   }
 
-  public int getYenInt() {
+  public final int getYenInt() {
     return yenInt;
   }
 
-  public String getYen() {
+  public final String getYen() {
     return this.yen;
   }
 
-  public int getLoa() {
+  public final int getLoa() {
     return loa;
   }
 
-  public int[][][] getYestareMap() {
-    return yestareMap;
-  }
-
-  public int getLoaBeginingDay() {
+  public final int getLoaBeginingDay() {
     return loaBeginingDay;
   }
 
-  public int getDayOfLoa() {
+  public final int getDayOfLoa() {
     return dayOfLoa;
   }
 
-  public boolean isLeapLoa() {
+  public final boolean isLeapLoa() {
     return leapLoa;
   }
 
-  public int getPeriodOfLoaInt() {
+  public final int getPeriodOfLoaInt() {
     return periodOfLoaInt;
   }
 
-  public String getPeriodOfLoa() {
+  public final String getPeriodOfLoa() {
     return periodOfLoa;
   }
 
-  public boolean isInMonth() {
+  public final boolean isInMonth() {
     return inMonth;
   }
 
-  public int getMonthOfLoa() {
+  public final int getMonthOfLoa() {
     return monthOfLoa;
   }
 
-  public int getDayOfPeriod() {
+  public final int getDayOfPeriod() {
     return dayOfPeriod;
   }
 
-  public int getWeekOfPeriod() {
+  public final int getWeekOfPeriod() {
     return weekOfPeriod;
   }
 
-  public int getDayOfWeekInt() {
+  public final int getDayOfWeekInt() {
     return dayOfWeekInt;
   }
 
-  public String getDayOfWeek() {
+  public final String getDayOfWeek() {
     return dayOfWeek;
   }
 
-  public int getYestareWeekDayInt() {
+  public final int getYestareWeekDayInt() {
     return yestareWeekDayInt;
   }
 
-  public String getYestareWeekDay() {
+  public final String getYestareWeekDay() {
     return yestareWeekDay;
   }
 
-  public void setYenInt(int yenInt) {
+  public final void setYenInt(final int yenInt) {
     this.setYen(this.intToRoman(yenInt));
     this.yenInt = yenInt;
   }
 
-  public void setYen(String yen) {
+  public final void setYen(final String yen) {
     this.yen = yen;
   }
 
-  public void setLoa(int loa) {
+  public final void setLoa(final int loa) {
     this.loa = loa;
   }
 
-  public void setYestareMap(int[][][] yestareMap) {
-    this.yestareMap = yestareMap;
-  }
-
-  public void setLoaBeginingDay(int loaBeginingDay) {
+  public final void setLoaBeginingDay(final int loaBeginingDay) {
     this.loaBeginingDay = loaBeginingDay;
   }
 
-  public void setDayOfLoa(int dayOfLoa) {
+  public final void setDayOfLoa(final int dayOfLoa) {
     this.dayOfLoa = dayOfLoa;
   }
 
-  public void setLeapLoa(boolean leapLoa) {
+  public final void setLeapLoa(final boolean leapLoa) {
     this.leapLoa = leapLoa;
   }
 
-  public void setPeriodOfLoaInt(int periodOfLoaInt) {
+  public final void setPeriodOfLoaInt(final int periodOfLoaInt) {
     this.setPeriodOfLoa(PERIODS_OF_LOA[periodOfLoaInt - 1]);
     this.periodOfLoaInt = periodOfLoaInt;
   }
 
-  public void setPeriodOfLoa(String periodOfLoa) {
+  public final void setPeriodOfLoa(final String periodOfLoa) {
     this.periodOfLoa = periodOfLoa;
   }
 
-  public void setInMonth(boolean inMonth) {
+  public final void setInMonth(final boolean inMonth) {
     this.inMonth = inMonth;
   }
 
-  public void setMonthOfLoa(int monthOfLoa) {
+  public final void setMonthOfLoa(final int monthOfLoa) {
     this.monthOfLoa = monthOfLoa;
   }
 
-  public void setDayOfPeriod(int dayOfPeriod) {
+  public final void setDayOfPeriod(final int dayOfPeriod) {
     this.dayOfPeriod = dayOfPeriod;
   }
 
-  public void setWeekOfPeriod(int weekOfPeriod) {
+  public final void setWeekOfPeriod(final int weekOfPeriod) {
     this.weekOfPeriod = weekOfPeriod;
   }
 
-  public void setDayOfWeekInt(int dayOfWeekInt) {
+  public final void setDayOfWeekInt(final int dayOfWeekInt) {
     this.setDayOfWeek(DAYS_OF_WEEK[dayOfWeekInt - 1]);
     this.dayOfWeekInt = dayOfWeekInt;
   }
 
-  public void setDayOfWeek(String dayOfWeek) {
+  public final void setDayOfWeek(final String dayOfWeek) {
     this.dayOfWeek = dayOfWeek;
   }
 
-  public void setYestareWeekDayInt(int yestareWeekDayInt) {
+  public final void setYestareWeekDayInt(final int yestareWeekDayInt) {
     this.setYestareWeekDay(DAYS_OF_WEEK[yestareWeekDayInt - 1]);
     this.yestareWeekDayInt = yestareWeekDayInt;
   }
 
-  public void setYestareWeekDay(String yestareWeekDay) {
+  public final void setYestareWeekDay(final String yestareWeekDay) {
     this.yestareWeekDay = yestareWeekDay;
   }
 
   /**
-   * Constructor with today's date
+   * Constructor with today's date.
    */
   public ImladrisCalendar() {
     this(new GregorianCalendar());
   }
 
   /**
-   * Constructors from Gregorian Dates
+   * Constructor from Gregorian date.
+   * @param gregorian Gregorian date to convert
    */
   public ImladrisCalendar(GregorianCalendar gregorian) {
-    this.setGregorian(new GregorianCalendar(gregorian.get(GregorianCalendar.YEAR), gregorian.get(GregorianCalendar.MONTH), gregorian.get(GregorianCalendar.DAY_OF_MONTH), gregorian.get(GregorianCalendar.HOUR_OF_DAY), gregorian.get(GregorianCalendar.MINUTE), gregorian.get(GregorianCalendar.SECOND)));
+    this.setGregorian(
+        new GregorianCalendar(
+            gregorian.get(GregorianCalendar.YEAR),
+            gregorian.get(GregorianCalendar.MONTH),
+            gregorian.get(GregorianCalendar.DAY_OF_MONTH),
+            gregorian.get(GregorianCalendar.HOUR_OF_DAY),
+            gregorian.get(GregorianCalendar.MINUTE),
+            gregorian.get(GregorianCalendar.SECOND)
+        )
+    );
     this.convert();
   }
 
+  /**
+   * Constructor from Gregorian date with sunset.
+   * @param sunset Time of sunset
+   * @param gregorian Gregorian date to convert
+   */
   public ImladrisCalendar(Time sunset, GregorianCalendar gregorian) {
     this.setSunset(sunset);
-    this.setGregorian(new GregorianCalendar(gregorian.get(GregorianCalendar.YEAR), gregorian.get(GregorianCalendar.MONTH), gregorian.get(GregorianCalendar.DAY_OF_MONTH), gregorian.get(GregorianCalendar.HOUR_OF_DAY), gregorian.get(GregorianCalendar.MINUTE), gregorian.get(GregorianCalendar.SECOND)));
+    this.setGregorian(
+        new GregorianCalendar(
+            gregorian.get(GregorianCalendar.YEAR),
+            gregorian.get(GregorianCalendar.MONTH),
+            gregorian.get(GregorianCalendar.DAY_OF_MONTH),
+            gregorian.get(GregorianCalendar.HOUR_OF_DAY),
+            gregorian.get(GregorianCalendar.MINUTE),
+            gregorian.get(GregorianCalendar.SECOND)
+        )
+    );
     this.convert();
   }
 
-  public ImladrisCalendar(int year, int month, int dayOfMonth) { // month is 1-based indexed (1-12|January|December)
+  //
+
+  public ImladrisCalendar(int year, int month, int dayOfMonth) {
     this.setGregorian(new GregorianCalendar(year, month - 1, dayOfMonth, 0, 0, 1));
     this.convert();
   }
@@ -364,32 +456,79 @@ public class ImladrisCalendar {
     this.convert();
   }
 
-  public ImladrisCalendar(int year, int month, int dayOfMonth, int hourOfDay, int minute, int second) {
-    this.setGregorian(new GregorianCalendar(year, month - 1, dayOfMonth, hourOfDay, minute, second));
-    this.convert();
-  }
-
-  public ImladrisCalendar(Time sunset, int year, int month, int dayOfMonth, int hourOfDay, int minute) {
-    this.setSunset(sunset);
-    this.setGregorian(new GregorianCalendar(year, month - 1, dayOfMonth, hourOfDay, minute, 1));
-    this.convert();
-  }
-
-  public ImladrisCalendar(Time sunset, int year, int month, int dayOfMonth, int hourOfDay, int minute, int second) {
-    this.setSunset(sunset);
-    this.setGregorian(new GregorianCalendar(year, month - 1, dayOfMonth, hourOfDay, minute, second));
+  /**
+   * Constructor from specified date and time arguments.
+   * @param year Year
+   * @param month Month is 1-based indexed (1-12|January-December)
+   * @param dayOfMonth Day of the month
+   * @param hourOfDay Hour of day (0-23)
+   * @param minute Minutes (0-59)
+   * @param second Seconds (0-59)
+   */
+  public ImladrisCalendar(int year, int month, int dayOfMonth,
+                          int hourOfDay, int minute, int second) {
+    this.setGregorian(
+        new GregorianCalendar(year, month - 1, dayOfMonth, hourOfDay, minute, second)
+    );
     this.convert();
   }
 
   /**
-   * Constructors from Imladris Dates
+   *Constructor from specified sunset, date and time arguments.
+   * @param sunset Time of sunset
+   * @param year Year
+   * @param month Month is 1-based indexed (1-12|January-December)
+   * @param dayOfMonth Day of the month
+   * @param hourOfDay Hour of day (0-23)
+   * @param minute Minutes (0-59)
    */
-  // Only for YESTARE & METTARE
+  public ImladrisCalendar(Time sunset, int year, int month, int dayOfMonth,
+                          int hourOfDay, int minute) {
+    this.setSunset(sunset);
+    this.setGregorian(
+        new GregorianCalendar(year, month - 1, dayOfMonth, hourOfDay, minute, 1)
+    );
+    this.convert();
+  }
+
+  /**
+   * Constructor from specified sunset, date and time arguments.
+   * @param sunset Time of sunset
+   * @param year Year
+   * @param month Month is 1-based indexed (1-12|January-December)
+   * @param dayOfMonth Day of the month
+   * @param hourOfDay Hour of day (0-23)
+   * @param minute Minutes (0-59)
+   * @param second Seconds (0-59)
+   */
+  public ImladrisCalendar(Time sunset, int year, int month, int dayOfMonth,
+                          int hourOfDay, int minute, int second) {
+    this.setSunset(sunset);
+    this.setGregorian(
+        new GregorianCalendar(year, month - 1, dayOfMonth, hourOfDay, minute, second)
+    );
+    this.convert();
+  }
+
+  /**
+   * Constructor from Imladris Reckoning date arguments only for Yestarë and Mettarë.
+   * @param yen Yen string (i.e.: 'I', 'IV')
+   * @param loa Loa integer
+   * @param period Period integer for Yestarë or Mettarë
+   */
   public ImladrisCalendar(String yen, int loa, int period) {
     this(yen, loa, period, 1);
   }
 
   // For any period, is 1-based indexed (1-9|YESTARE-METTARE)
+
+  /**
+   * Constructor from Imladris Reckoning date arguments for any Period.
+   * @param yen Yen string (i.e.: 'I', 'IV')
+   * @param loa Loa integer
+   * @param period Period integer
+   * @param day Day in Period integer
+   */
   public ImladrisCalendar(String yen, int loa, int period, int day) {
     this.setYenInt(this.romanToInt(yen));
     this.setLoa(loa);
@@ -399,20 +538,32 @@ public class ImladrisCalendar {
     this.updateFromYenLoaPeriodAndDayOfPeriod();
   }
 
-  /**
-   * API Methods
-   */
+  /* ************* API Methods ************* */
+
   public boolean before(ImladrisCalendar cal) {
     return !this.same(cal) && !this.after(cal);
   }
 
+  /**
+   * Compare to other ImladrisCalendar instance.
+   * @param cal Calendar to compare to
+   * @return Result of comparison
+   */
   public boolean same(ImladrisCalendar cal) {
     boolean same = false;
-    if (this.getYenInt() == cal.getYenInt() && this.getLoa() == cal.getLoa() && this.getDayOfLoa() == cal.getDayOfLoa())
+    if (this.getYenInt() == cal.getYenInt()
+        && this.getLoa() == cal.getLoa()
+        && this.getDayOfLoa() == cal.getDayOfLoa()) {
       same = true;
+    }
     return same;
   }
 
+  /**
+   * Check if current instance is after the provided one.
+   * @param cal Calendar to compare against
+   * @return Result of comparison
+   */
   public boolean after(ImladrisCalendar cal) {
     boolean after = false;
     if (this.getYenInt() < cal.getYenInt()) {
@@ -429,6 +580,11 @@ public class ImladrisCalendar {
     return after;
   }
 
+  /**
+   * Getter of the ImladrisCalendar fields of the calendar.
+   * @param field Id of the index field to get value from
+   * @return Value of the required field
+   */
   public int get(int field) {
     int value = -1;
     switch (field) {
@@ -462,9 +618,8 @@ public class ImladrisCalendar {
   /**
    * Add 'amount' to 'field'.
    * Precondition: adding 'amount' must not overflow current 'field' state
-   *
-   * @param field
-   * @param amount
+   * @param field Id of the index field to add to
+   * @param amount Amount of the type of field to add
    */
   public void add(int field, int amount) {
     switch (field) {
@@ -496,6 +651,11 @@ public class ImladrisCalendar {
     }
   }
 
+  /**
+   * Get length of provided period.
+   * @param period Period to get length of
+   * @return Length of period
+   */
   public int lengthOfPeriod(int period) {
     int[] lengths = LENGTH_OF_PERIODS;
     if (this.isLeapLoa()) {
@@ -508,64 +668,58 @@ public class ImladrisCalendar {
     this.calculate(this.getGregorian());
   }
 
-  /**
-   * INTERNAL Methods
-   */
+  /* ************* INTERNAL METHODS ************* */
+
   private void convert() {
     this.calculate(this.getGregorian());
   }
 
   /**
-   * With yen, loa, period and dayOfPeriod set, update the rest
+   * With yen, loa, period and dayOfPeriod set, update the rest.
    */
   private void updateFromYenLoaPeriodAndDayOfPeriod() {
+    // calculate day of march of year 'y' in which loa begins
     int yen = this.getYenInt();
     int loa = this.getLoa();
-    int period = this.getPeriodOfLoaInt();
-    int dayOfPeriod = this.getDayOfPeriod();
-    // initialize data variables
-    int loaBeg = 0;
-    int daysOfLoa = 0;
-    boolean isLeapLoa = false;
-    boolean isMonth = false;
-    int month = 0;
-    int weekOfPeriod = 0;
-    int dayOfWeek = 0;
-    int yestareWeekDay = 0;
-
     int y = (yen - 1) * 144 + loa;
-    // calculate day of march of year 'y' in which loa begins
-    loaBeg = this.loaBeginningDay(y);
+    int loaBeg = this.loaBeginningDay(y);
+    this.setLoaBeginingDay(loaBeg);
     // calculate if is leap loa
-    isLeapLoa = this.checkIfLeapLoa(loa);
+    boolean isLeapLoa = this.checkIfLeapLoa(loa);
     // calculate day of Loa
     int[] values = ImladrisCalendar.LENGTH_OF_PERIODS;
-    if (isLeapLoa)
+    if (isLeapLoa) {
       values = ImladrisCalendar.LENGTH_OF_PERIODS_LEAP;
+    }
+    int period = this.getPeriodOfLoaInt();
+    int daysOfLoa = 0;
     for (int i = ImladrisCalendar.YESTARE; i < period; i++) {
       daysOfLoa += values[i - 1];
     }
-    daysOfLoa += dayOfPeriod;
+    daysOfLoa += this.getDayOfPeriod();
     // if sunset defined, check if has passed
     if (this.isSunsetDefined()) {
       GregorianCalendar cal = this.getGregorian();
-      String str = cal.get(GregorianCalendar.HOUR_OF_DAY) + ":" + cal.get(GregorianCalendar.MINUTE) + ":" + cal.get(GregorianCalendar.SECOND);
+      String str = cal.get(GregorianCalendar.HOUR_OF_DAY) + ":"
+          + cal.get(GregorianCalendar.MINUTE) + ":"
+          + cal.get(GregorianCalendar.SECOND);
       Time time = Time.valueOf(str);
       if (!time.before(this.getSunset())) {
         daysOfLoa++;
       }
     }
     // calculate current week in month (if any), and day of week
+    boolean isMonth = false;
+    int month = 0;
     if (this.periodIsMonth(period)) {
       isMonth = true;
       month = this.calculateMonthFromPeriod(period);
     }
     int[] weekInfo = this.calculateWeekAndDayOfWeek(yen, loa, daysOfLoa);
-    weekOfPeriod = weekInfo[0];
-    dayOfWeek = weekInfo[1];
-    yestareWeekDay = weekInfo[2];
+    int weekOfPeriod = weekInfo[0];
+    int dayOfWeek = weekInfo[1];
+    int yestareWeekDay = weekInfo[2];
     // store data and return
-    this.setLoaBeginingDay(loaBeg);
     this.setDayOfLoa(daysOfLoa);
     this.setLeapLoa(isLeapLoa);
     this.setInMonth(isMonth);
@@ -578,46 +732,37 @@ public class ImladrisCalendar {
   }
 
   /**
-   * With yen, loa and dayOfLoa set, update the rest
+   * With yen, loa and dayOfLoa set, update the rest.
    */
   private void updateFromYenLoaAndDayOfLoa() {
     int yen = this.getYenInt();
     int loa = this.getLoa();
     int dayOfLoa = this.getDayOfLoa();
-    // initialize data variables
-    int loaBeg = 0;
-    boolean isLeapLoa = false;
-    int period = 0;
-    int dayOfPeriod = 0;
-    boolean isMonth = false;
-    int month = 0;
-    int weekOfPeriod = 0;
-    int dayOfWeek = 0;
-    int yestareWeekDay = 0;
-
     int y = (yen - 1) * 144 + loa;
     // calculate day of march of year 'y' in which loa begins
-    loaBeg = this.loaBeginningDay(y);
+    int loaBeg = this.loaBeginningDay(y);
     // calculate if is leap loa
-    isLeapLoa = this.checkIfLeapLoa(loa);
+    boolean isLeapLoa = this.checkIfLeapLoa(loa);
     // calculate current month and day of month
     int[] periodInfo = this.calculatePeriodAndDayInPeriod(dayOfLoa, isLeapLoa);
-    period = periodInfo[0];
-    dayOfPeriod = periodInfo[1];
+    int period = periodInfo[0];
+    int dayOfPeriod = periodInfo[1];
     // calculate current week in month (if any), and day of week
+    boolean isMonth = false;
+    int month = 0;
     if (this.periodIsMonth(period)) {
       isMonth = true;
       month = this.calculateMonthFromPeriod(period);
     }
     int[] weekInfo = this.calculateWeekAndDayOfWeek(yen, loa, dayOfLoa);
-    weekOfPeriod = weekInfo[0];
-    dayOfWeek = weekInfo[1];
-    yestareWeekDay = weekInfo[2];
+    int weekOfPeriod = weekInfo[0];
+    int dayOfWeek = weekInfo[1];
+    int yestareWeekDay = weekInfo[2];
     // store data and return
+    this.setDayOfPeriod(dayOfPeriod);
     this.setLoaBeginingDay(loaBeg);
     this.setLeapLoa(isLeapLoa);
     this.setPeriodOfLoaInt(period);
-    this.setDayOfPeriod(dayOfPeriod);
     this.setInMonth(isMonth);
     this.setMonthOfLoa(month);
     this.setWeekOfPeriod(weekOfPeriod);
@@ -639,23 +784,11 @@ public class ImladrisCalendar {
   }
 
   private void calculate(GregorianCalendar cal) {
-    // initialize data variables
-    int yen = 0;
-    int loa = 0;
-    int loaBeg = 0;
-    int daysOfLoa = 0;
-    boolean isLeapLoa = false;
-    int period = 0;
-    int dayOfPeriod = 0;
-    boolean isMonth = false;
-    int month = 0;
-    int weekOfPeriod = 0;
-    int dayOfWeek = 0;
-    int yestareWeekDay = 0;
-
     // if sunset defined, check if has passed
     if (this.isSunsetDefined()) {
-      String str = cal.get(GregorianCalendar.HOUR_OF_DAY) + ":" + cal.get(GregorianCalendar.MINUTE) + ":" + cal.get(GregorianCalendar.SECOND);
+      String str = cal.get(GregorianCalendar.HOUR_OF_DAY) + ":"
+          + cal.get(GregorianCalendar.MINUTE) + ":"
+          + cal.get(GregorianCalendar.SECOND);
       Time time = Time.valueOf(str);
       if (!time.before(this.getSunset())) {
         cal.add(GregorianCalendar.DAY_OF_MONTH, 1);
@@ -664,44 +797,46 @@ public class ImladrisCalendar {
     }
     int y = cal.get(GregorianCalendar.YEAR);
     // calculate day of march of year 'y' in which loa begins
-    loaBeg = this.loaBeginningDay(y);
+    int loaBeg = this.loaBeginningDay(y);
     GregorianCalendar loaCal = new GregorianCalendar(y, GregorianCalendar.MARCH, loaBeg);
     // if that day hasn't come yet, use previous year's loa
     if (cal.before(loaCal)) {
       y = y - 1;
       loaBeg = this.loaBeginningDay(y);
     }
-    // calculate yen
-    yen = this.calculateYen(y);
     // calculate loa
-    loa = this.calculateLoa(y);
+    int loa = this.calculateLoa(y);
     // calculate if is leap loa
-    isLeapLoa = this.checkIfLeapLoa(loa);
+    boolean isLeapLoa = this.checkIfLeapLoa(loa);
     // get amount of days of ongoing loa
     loaCal.set(GregorianCalendar.YEAR, y);
     loaCal.set(GregorianCalendar.DAY_OF_MONTH, loaBeg);
-    daysOfLoa = this.daysBetweenGregorian(loaCal, cal);
+    int daysOfLoa = this.daysBetweenGregorian(loaCal, cal);
     // calculate current month and day of month
     int[] periodInfo = this.calculatePeriodAndDayInPeriod(daysOfLoa, isLeapLoa);
-    period = periodInfo[0];
-    dayOfPeriod = periodInfo[1];
+    int period = periodInfo[0];
+    int dayOfPeriod = periodInfo[1];
+    // calculate yen
+    int yen = this.calculateYen(y);
     // calculate current week in month (if any), and day of week
+    boolean isMonth = false;
+    int month = 0;
     if (this.periodIsMonth(period)) {
       isMonth = true;
       month = this.calculateMonthFromPeriod(period);
     }
     int[] weekInfo = this.calculateWeekAndDayOfWeek(yen, loa, daysOfLoa);
-    weekOfPeriod = weekInfo[0];
-    dayOfWeek = weekInfo[1];
-    yestareWeekDay = weekInfo[2];
+    int weekOfPeriod = weekInfo[0];
+    int dayOfWeek = weekInfo[1];
+    int yestareWeekDay = weekInfo[2];
     // store data and return
     this.setYenInt(yen);
+    this.setDayOfPeriod(dayOfPeriod);
     this.setLoa(loa);
     this.setLoaBeginingDay(loaBeg);
     this.setDayOfLoa(daysOfLoa);
     this.setLeapLoa(isLeapLoa);
     this.setPeriodOfLoaInt(period);
-    this.setDayOfPeriod(dayOfPeriod);
     this.setInMonth(isMonth);
     this.setMonthOfLoa(month);
     this.setWeekOfPeriod(weekOfPeriod);
@@ -749,14 +884,15 @@ public class ImladrisCalendar {
     }
     // calculate appropriate yestare
     int mod = loa % 12;
-    if (mod == 0)
+    if (mod == 0) {
       yestare = yestareMap;
-    else if (mod <= 3)
+    } else if (mod <= 3) {
       yestare = yestareMap + 3;
-    else if (mod <= 7)
+    } else if (mod <= 7) {
       yestare = yestareMap + 2;
-    else
+    } else {
       yestare = yestareMap + 1;
+    }
     return yestare;
   }
 
@@ -766,8 +902,9 @@ public class ImladrisCalendar {
 
   private int[] calculatePeriodAndDayInPeriod(int days, boolean leap) {
     int[] daysInPeriod = ImladrisCalendar.LENGTH_OF_PERIODS;
-    if (leap)
+    if (leap) {
       daysInPeriod = ImladrisCalendar.LENGTH_OF_PERIODS_LEAP;
+    }
     int period = 1;
     boolean end = false;
     while (!end && (period < 10)) {
@@ -793,7 +930,7 @@ public class ImladrisCalendar {
   private int calculateDayOfWeekOfYestare(int yen, int loa) {
     int offsetRegular = -1;
     int offsetLeap = 2;
-    int firstYestareDayOfWeek = ImladrisCalendar.LOA_0_YEN_I_DAY_OF_WEEK;
+    int firstYestareDayOfWeek = ImladrisCalendar.LOA_1_YEN_I_DAY_OF_WEEK;
 
     int totalLoas = (yen) * 144 + loa - 1;
     int totalLeapLoas = (int) Math.floor(totalLoas / 12);
@@ -827,7 +964,8 @@ public class ImladrisCalendar {
     return ret;
   }
 
-  private int daysBetweenGregorian(final GregorianCalendar startDate, final GregorianCalendar endDate) {
+  private int daysBetweenGregorian(final GregorianCalendar startDate,
+                                   final GregorianCalendar endDate) {
     GregorianCalendar dateStart = (GregorianCalendar) startDate.clone();
     dateStart.set(GregorianCalendar.HOUR_OF_DAY, 0);
     dateStart.set(GregorianCalendar.MINUTE, 0);
@@ -844,14 +982,19 @@ public class ImladrisCalendar {
     return daysBetween;
   }
 
+  /**
+   * Convert integer number to roman numerals.
+   * @param num Integer number to convert
+   * @return Converted roman numerals
+   */
   public String intToRoman(int num) {
-    String[] ROMAN = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
-    int[] ARABIC = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
+    String[] romanBase = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
+    int[] arabicBase = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
     String roman = "";
-    for (int i = 0; i < ROMAN.length; i++) {
-      while (num >= ARABIC[i]) {
-        num -= ARABIC[i];
-        roman += ROMAN[i];
+    for (int i = 0; i < romanBase.length; i++) {
+      while (num >= arabicBase[i]) {
+        num -= arabicBase[i];
+        roman += romanBase[i];
       }
     }
     return roman;
@@ -881,10 +1024,17 @@ public class ImladrisCalendar {
       case 'I':
         num = 1;
         break;
+      default:
+        break;
     }
     return num;
   }
 
+  /**
+   * Roman numerals string to integer.
+   * @param roman Roman numeral to convert
+   * @return Convert integer
+   */
   public int romanToInt(String roman) {
     roman = roman.toUpperCase();
     int arabic = 0;
@@ -907,6 +1057,10 @@ public class ImladrisCalendar {
     return arabic;
   }
 
+  /**
+   * Implementation of toString to serialize the date.
+   * @return Serialized date
+   */
   public String toString() {
     String str = this.getDayOfWeek() + ", ";
     if (this.isInMonth()) {
