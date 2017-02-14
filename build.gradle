@@ -11,7 +11,14 @@ apply plugin: 'java'
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
+apply plugin: 'checkstyle'
+checkstyle {
+    toolVersion = '7.5'
+    configFile = file('checkstyle.xml')
+}
+
 repositories {
+    mavenCentral()
 }
 
 dependencies {
