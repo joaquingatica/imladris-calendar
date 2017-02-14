@@ -1,5 +1,10 @@
-group 'com.erutulco'
-version 'imladris-calendar'
+def PACKAGE = 'com.erutulco.utils'
+def ID = 'imladris-calendar'
+def VERSION = '1.2.1'
+def STATE = 'rc'
+
+group PACKAGE
+version ID
 
 apply plugin: 'java'
 
@@ -13,6 +18,7 @@ dependencies {
 }
 
 jar {
-    baseName = 'imladris-calendar'
-    version =  '1.2.0'
+    baseName = ID
+    version =  VERSION
+    classifier = STATE
 }
