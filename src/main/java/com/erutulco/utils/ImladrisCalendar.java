@@ -407,6 +407,14 @@ public class ImladrisCalendar {
   }
 
   /**
+   * Constructor with today's date with sunset.
+   * @param sunset Time of sunset
+   */
+  public ImladrisCalendar(Time sunset) {
+    this(sunset, new GregorianCalendar());
+  }
+
+  /**
    * Constructor from Gregorian date.
    * @param gregorian Gregorian date to convert
    */
@@ -469,6 +477,21 @@ public class ImladrisCalendar {
                           int hourOfDay, int minute, int second) {
     this.setGregorian(
         new GregorianCalendar(year, month - 1, dayOfMonth, hourOfDay, minute, second)
+    );
+    this.convert();
+  }
+
+  /**
+   *Constructor from specified sunset, date and time arguments.
+   * @param sunset Time of sunset
+   * @param year Year
+   * @param month Month is 1-based indexed (1-12|January-December)
+   * @param dayOfMonth Day of the month
+   */
+  public ImladrisCalendar(Time sunset, int year, int month, int dayOfMonth) {
+    this.setSunset(sunset);
+    this.setGregorian(
+        new GregorianCalendar(year, month - 1, dayOfMonth, 0, 0, 1)
     );
     this.convert();
   }
