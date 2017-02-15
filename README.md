@@ -42,13 +42,11 @@ Clone the repository, and run the gradle command to compile the `jar`:
 gradle jar
 ```
 
-To compile `jar` files for the Javadoc and Sources, run the corresponding gradle commands:
+To compile `jar` files for the Sources, run the corresponding gradle commands:
 ```bash
-gradle javadocJar
 gradle sourcesJar
 ```
-
-The compiled `jar` files are generated in the `build/libs/` folder,
+The compiled `jar` file is generated in the `build/libs/` folder,
 
 ### Javadoc
 
@@ -58,7 +56,13 @@ Run the gradle command to generate the Javadoc:
 gradle javadoc
 ```
 
-Then open the generated `build/docs/javadoc/index.html` file in your browser
+Then open the generated `build/docs/javadoc/index.html` file in your browser.
+
+To compile `jar` files for the Javadoc, run the corresponding gradle commands:
+```bash
+gradle javadocJar
+```
+The compiled `jar` file is generated in the `build/libs/` folder,
 
 ## Usage
 
