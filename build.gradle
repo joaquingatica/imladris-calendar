@@ -18,7 +18,7 @@ checkstyle {
 }
 
 repositories {
-    mavenCentral()
+    jcenter()
 }
 
 dependencies {
@@ -28,4 +28,79 @@ jar {
     baseName = ID
     version =  VERSION
     classifier = STATE
+}
+task sourcesJar(type: Jar, dependsOn: classes) {
+    baseName = ID
+    version =  VERSION
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    baseName = ID
+    version =  VERSION
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+artifacts {
+    archives jar
+    archives sourcesJar
+    archives javadocJar
+}
+
+// Maven publishing
+
+apply plugin: 'maven-publish'
+
+publishing {
+    publications {
+        MavenJava(MavenPublication) {
+            groupId PACKAGE
+            artifactId ID
+            version VERSION + '-' + STATE
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+        }
+    }
+}
+
+// Bintray publishing
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+    }
+}
+apply plugin: 'com.jfrog.bintray'
+
+// Requires an existing local.properties file with the entries specified below
+def props = new Properties()
+file('local.properties').withInputStream { props.load(it) }
+def BINTRAY_USER = props.getProperty('bintray.user') ? props.getProperty('bintray.user') : System.getenv('BINTRAY_USER')
+def BINTRAY_KEY = props.getProperty('bintray.apiKey') ? props.getProperty('bintray.apiKey') : System.getenv('BINTRAY_KEY')
+def BINTRAY_PASS = props.getProperty('bintray.gpgPass') ? props.getProperty('bintray.gpgPass') : System.getenv('BINTRAY_PASS')
+
+bintray {
+    user = BINTRAY_USER
+    key = BINTRAY_KEY
+    publications = ['MavenJava']
+    pkg {
+        repo = 'erutulco'
+        name = 'imladris-calendar'
+        licenses = ['GPL-3.0']
+        vcsUrl = 'https://github.com/joaquingatica/imladris-calendar.git'
+        version {
+            name = VERSION + '-' + STATE
+            desc = 'Imladris Calendar release ' + VERSION + ' ' + STATE
+            released  = new Date()
+            vcsTag = VERSION
+            gpg {
+                sign = true
+                passphrase = BINTRAY_PASS
+            }
+        }
+    }
 }
