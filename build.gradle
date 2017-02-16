@@ -61,15 +61,16 @@ jar {
 task sourcesJar(type: Jar, dependsOn: classes) {
     baseName = ID
     version =  VERSION
-    classifier = 'sources'
+    classifier = STATE + '-sources'
     from sourceSets.main.allSource
 }
 task javadocJar(type: Jar, dependsOn: javadoc) {
     baseName = ID
     version =  VERSION
-    classifier = 'javadoc'
+    classifier = STATE + '-javadoc'
     from javadoc.destinationDir
 }
+task jarAll(dependsOn: ['jar', 'sourcesJar', 'javadocJar']) {}
 artifacts {
     archives jar
     archives sourcesJar
