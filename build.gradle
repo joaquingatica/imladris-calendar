@@ -1,7 +1,36 @@
 def PACKAGE = 'com.erutulco.utils'
 def ID = 'imladris-calendar'
 def VERSION = '1.2.1'
-def STATE = 'rc'
+def STATE = 'rc3'
+def NAME = 'Imladris Calendar'
+def DESCRIPTION = 'Java library for manipulating Imladris Reckoning dates.'
+def GITHUB_PATH = 'joaquingatica/imladris-calendar'
+def GITHUB_MAIN = '//github.com/' + GITHUB_PATH
+def GITHUB_HTTPS = 'https:' + GITHUB_MAIN
+def URL = GITHUB_HTTPS
+def BINTRAY_REPOSITORY = 'erutulco'
+
+def LICENSE_ID = 'GPL-3.0'
+def LICENSE_NAME = 'The GNU General Public License v3.0'
+def LICENSE_URL = 'https://www.gnu.org/licenses/gpl-3.0.txt'
+
+// Requires an existing local.properties file with the entries specified below
+def props = new Properties()
+file('local.properties').withInputStream { props.load(it) }
+
+def MAVEN_DEVELOPER_ID = props.getProperty('maven.developer.id') ? props.getProperty('maven.developer.id') : System.getenv('MAVEN_DEVELOPER_ID')
+def MAVEN_DEVELOPER_NAME = props.getProperty('maven.developer.name') ? props.getProperty('maven.developer.name') : System.getenv('MAVEN_DEVELOPER_NAME')
+def MAVEN_DEVELOPER_EMAIL = props.getProperty('maven.developer.email') ? props.getProperty('maven.developer.email') : System.getenv('MAVEN_DEVELOPER_EMAIL')
+def BINTRAY_USER = props.getProperty('bintray.user') ? props.getProperty('bintray.user') : System.getenv('BINTRAY_USER')
+def BINTRAY_KEY = props.getProperty('bintray.apiKey') ? props.getProperty('bintray.apiKey') : System.getenv('BINTRAY_KEY')
+def BINTRAY_PASS = props.getProperty('bintray.gpgPass') ? props.getProperty('bintray.gpgPass') : System.getenv('BINTRAY_PASS')
+
+def GITHUB_CONNECTION = 'git:' + GITHUB_MAIN + '.git'
+def GITHUB_SSH = 'ssh://' + GITHUB_MAIN + '.git'
+def GITHUB_GIT = GITHUB_HTTPS + '.git'
+def GITHUB_MASTER = GITHUB_HTTPS + '/tree/master'
+
+// ************
 
 group PACKAGE
 version ID
@@ -51,6 +80,28 @@ artifacts {
 
 apply plugin: 'maven-publish'
 
+// POM file setup
+def pomConfig = {
+    licenses {
+        license {
+            name LICENSE_NAME
+            url LICENSE_URL
+            distribution "repo"
+        }
+    }
+    developers {
+        developer {
+            id MAVEN_DEVELOPER_ID
+            name MAVEN_DEVELOPER_NAME
+            email MAVEN_DEVELOPER_EMAIL
+        }
+    }
+    scm {
+        connection 'scm:git:' + GITHUB_CONNECTION
+        developerConnection 'scm:git:' + GITHUB_SSH
+        url GITHUB_MASTER
+    }
+}
 publishing {
     publications {
         MavenJava(MavenPublication) {
@@ -60,6 +111,13 @@ publishing {
             from components.java
             artifact sourcesJar
             artifact javadocJar
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description', DESCRIPTION)
+                root.appendNode('name', NAME)
+                root.appendNode('url', URL)
+                root.children().last() + pomConfig
+            }
         }
     }
 }
@@ -76,25 +134,18 @@ buildscript {
 }
 apply plugin: 'com.jfrog.bintray'
 
-// Requires an existing local.properties file with the entries specified below
-def props = new Properties()
-file('local.properties').withInputStream { props.load(it) }
-def BINTRAY_USER = props.getProperty('bintray.user') ? props.getProperty('bintray.user') : System.getenv('BINTRAY_USER')
-def BINTRAY_KEY = props.getProperty('bintray.apiKey') ? props.getProperty('bintray.apiKey') : System.getenv('BINTRAY_KEY')
-def BINTRAY_PASS = props.getProperty('bintray.gpgPass') ? props.getProperty('bintray.gpgPass') : System.getenv('BINTRAY_PASS')
-
 bintray {
     user = BINTRAY_USER
     key = BINTRAY_KEY
     publications = ['MavenJava']
     pkg {
-        repo = 'erutulco'
-        name = 'imladris-calendar'
-        licenses = ['GPL-3.0']
-        vcsUrl = 'https://github.com/joaquingatica/imladris-calendar.git'
+        repo = BINTRAY_REPOSITORY
+        name = ID
+        licenses = [LICENSE_ID]
+        vcsUrl = GITHUB_GIT
         version {
             name = VERSION + '-' + STATE
-            desc = 'Imladris Calendar release ' + VERSION + ' ' + STATE
+            desc = NAME + ' release ' + VERSION + ' ' + STATE
             released  = new Date()
             vcsTag = VERSION
             gpg {

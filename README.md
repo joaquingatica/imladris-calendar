@@ -1,5 +1,7 @@
 # Imladris Calendar Java Library
 
+Java library for manipulating Imladris Reckoning dates.
+
 ## Package and Files
 `com.erutulco.utils.ImladrisCalendar` is the package and class name to be used as library.
 `src/main/java/com/erutulco/utils/ImladrisCalendar.java` is the class file.
