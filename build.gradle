@@ -58,29 +58,44 @@ jar {
     version =  VERSION
     classifier = STATE
 }
-task javaJar (type: Jar) {
-    baseName = ID
-    version =  VERSION
-    classifier = ''
-    from sourceSets.main.output
-}
 task sourcesJar(type: Jar, dependsOn: classes) {
     baseName = ID
     version =  VERSION
-    classifier = 'sources'
+    classifier = STATE + '-sources'
     from sourceSets.main.allSource
 }
 task javadocJar(type: Jar, dependsOn: javadoc) {
     baseName = ID
     version =  VERSION
+    classifier = STATE + '-javadoc'
+    from javadoc.destinationDir
+}
+task jarAll(dependsOn: ['jar', 'sourcesJar', 'javadocJar']) {}
+
+// Publishing JAR tasks
+task jarPublish(type: Jar) {
+    baseName = ID
+    version =  VERSION
+    classifier = ''
+    from sourceSets.main.output
+}
+task sourcesJarPublish(type: Jar, dependsOn: classes) {
+    baseName = ID
+    version =  VERSION
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+task javadocJarPublish(type: Jar, dependsOn: javadoc) {
+    baseName = ID
+    version =  VERSION
     classifier = 'javadoc'
     from javadoc.destinationDir
 }
-task jarAll(dependsOn: ['javaJar', 'sourcesJar', 'javadocJar']) {}
+task jarAllPublish(dependsOn: ['jarPublish', 'sourcesJarPublish', 'javadocJarPublish']) {}
 artifacts {
-    archives javaJar
-    archives sourcesJar
-    archives javadocJar
+    archives jarPublish
+    archives sourcesJarPublish
+    archives javadocJarPublish
 }
 
 // Maven publishing
@@ -115,9 +130,9 @@ publishing {
             groupId PACKAGE
             artifactId ID
             version VERSION + '-' + STATE
-            artifact javaJar
-            artifact sourcesJar
-            artifact javadocJar
+            artifact jarPublish
+            artifact sourcesJarPublish
+            artifact javadocJarPublish
             pom.withXml {
                 def root = asNode()
                 root.appendNode('description', DESCRIPTION)
