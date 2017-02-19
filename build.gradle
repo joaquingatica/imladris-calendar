@@ -1,7 +1,7 @@
 def PACKAGE = 'com.erutulco.utils'
 def ID = 'imladris-calendar'
 def VERSION = '1.2.1'
-def STATE = 'test'
+def STATE = 'rc6'
 def NAME = 'Imladris Calendar'
 def DESCRIPTION = 'Java library for manipulating Imladris Reckoning dates.'
 def GITHUB_PATH = 'joaquingatica/imladris-calendar'
