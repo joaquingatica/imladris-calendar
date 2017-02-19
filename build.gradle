@@ -1,7 +1,7 @@
 def PACKAGE = 'com.erutulco.utils'
 def ID = 'imladris-calendar'
 def VERSION = '1.2.1'
-def STATE = 'rc3'
+def STATE = 'test'
 def NAME = 'Imladris Calendar'
 def DESCRIPTION = 'Java library for manipulating Imladris Reckoning dates.'
 def GITHUB_PATH = 'joaquingatica/imladris-calendar'
@@ -58,21 +58,27 @@ jar {
     version =  VERSION
     classifier = STATE
 }
+task javaJar (type: Jar) {
+    baseName = ID
+    version =  VERSION
+    classifier = ''
+    from sourceSets.main.output
+}
 task sourcesJar(type: Jar, dependsOn: classes) {
     baseName = ID
     version =  VERSION
-    classifier = STATE + '-sources'
+    classifier = 'sources'
     from sourceSets.main.allSource
 }
 task javadocJar(type: Jar, dependsOn: javadoc) {
     baseName = ID
     version =  VERSION
-    classifier = STATE + '-javadoc'
+    classifier = 'javadoc'
     from javadoc.destinationDir
 }
-task jarAll(dependsOn: ['jar', 'sourcesJar', 'javadocJar']) {}
+task jarAll(dependsOn: ['javaJar', 'sourcesJar', 'javadocJar']) {}
 artifacts {
-    archives jar
+    archives javaJar
     archives sourcesJar
     archives javadocJar
 }
@@ -109,7 +115,7 @@ publishing {
             groupId PACKAGE
             artifactId ID
             version VERSION + '-' + STATE
-            from components.java
+            artifact javaJar
             artifact sourcesJar
             artifact javadocJar
             pom.withXml {
