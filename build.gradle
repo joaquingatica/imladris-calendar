@@ -30,6 +30,11 @@ def GITHUB_SSH = 'ssh://' + GITHUB_MAIN + '.git'
 def GITHUB_GIT = GITHUB_HTTPS + '.git'
 def GITHUB_MASTER = GITHUB_HTTPS + '/tree/master'
 
+def STATE_SUFFIX = '-' + STATE
+if (STATE == 'stable') {
+    STATE_SUFFIX = ''
+}
+
 // ************
 
 group PACKAGE
@@ -133,7 +138,7 @@ publishing {
         MavenJava(MavenPublication) {
             groupId PACKAGE
             artifactId ID
-            version VERSION + '-' + STATE
+            version VERSION + STATE_SUFFIX
             from project.components.java
             artifact jarPublish
             artifact sourcesJarPublish
@@ -171,10 +176,10 @@ bintray {
         licenses = [LICENSE_ID]
         vcsUrl = GITHUB_GIT
         version {
-            name = VERSION + '-' + STATE
+            name = VERSION + STATE_SUFFIX
             desc = NAME + ' release ' + VERSION + ' ' + STATE
             released  = new Date()
-            vcsTag = VERSION
+            vcsTag = VERSION + STATE_SUFFIX
             gpg {
                 sign = true
                 passphrase = BINTRAY_PASS
