@@ -1,5 +1,7 @@
 # Imladris Calendar Java Library
 
+[ ![Download](https://api.bintray.com/packages/joaquingatica/erutulco/imladris-calendar/images/download.svg) ](https://bintray.com/joaquingatica/erutulco/imladris-calendar/_latestVersion)
+
 Java library for manipulating Imladris Reckoning dates.
 
 ## Package and Files
