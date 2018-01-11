@@ -113,7 +113,7 @@ public class ImladrisCalendar {
    * Names for each Loa Period.
    */
   private static final String[] PERIODS_OF_LOA = {
-      "Yestarë", "Tuilë", "Lairë", "Yávië", "Ender",
+      "Yestarë", "Tuilë", "Lairë", "Yávië", "Enderi",
       "Quellë", "Hrívë", "Coirë", "Mettarë"
   };
   /**
